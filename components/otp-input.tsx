@@ -4,11 +4,10 @@ import { useRef } from "react"
 import { Input } from "@/components/ui/input"
 
 export default function OTPInput() {
-    const inputs = useRef<Array<HTMLInputElement | null>>([])
+    const inputs = useRef<(HTMLInputElement | null)[]>([])
 
     const handleChange = (value: string, index: number) => {
         if (!value) return
-
         if (index < 5) {
             inputs.current[index + 1]?.focus()
         }
@@ -29,7 +28,9 @@ export default function OTPInput() {
                 <Input
                     key={i}
                     maxLength={1}
-                    ref={(el) => (inputs.current[i] = el)}
+                    ref={(el) => {
+                        inputs.current[i] = el
+                    }}
                     onChange={(e) => handleChange(e.target.value, i)}
                     onKeyDown={(e) => handleKeyDown(e, i)}
                     className="text-center text-lg"
