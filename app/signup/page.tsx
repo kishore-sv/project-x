@@ -28,7 +28,6 @@ export default function SignupPage() {
     const [city, setCity] = useState("")
     const [dob, setDob] = useState("")
     const [age, setAge] = useState<number | null>(null)
-    const [availability, setAvailability] = useState("")
     const router = useRouter()
 
     const calculateAge = (birthDate: string) => {
@@ -200,8 +199,6 @@ export default function SignupPage() {
                                 <SelectContent>
                                     <SelectItem value="male">Male</SelectItem>
                                     <SelectItem value="female">Female</SelectItem>
-                                    <SelectItem value="other">Other</SelectItem>
-                                    <SelectItem value="prefer_not_say">Prefer not to say</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -228,21 +225,6 @@ export default function SignupPage() {
                                     <SelectItem value="bhopal">Bhopal</SelectItem>
                                     <SelectItem value="kochi">Kochi</SelectItem>
                                     <SelectItem value="indore">Indore</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-
-                        {/* Availability */}
-                        <div className="space-y-2">
-                            <Label>Availability<sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup></Label>
-                            <Select value={availability} onValueChange={setAvailability}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder="Select Availability" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="full_time">Full-time</SelectItem>
-                                    <SelectItem value="part_time">Part-time</SelectItem>
-                                    <SelectItem value="freelance">Freelance</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
