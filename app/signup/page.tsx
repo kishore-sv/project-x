@@ -19,14 +19,47 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
 import { FieldDescription, FieldError } from "@/components/ui/field"
+import { toast } from "sonner"
 
 export default function SignupPage() {
     const [step, setStep] = useState<"details" | "otp">("details")
     const [open, setOpen] = useState(false)
     const [gender, setGender] = useState("")
     const [city, setCity] = useState("")
+    const [dob, setDob] = useState("")
+    const [age, setAge] = useState<number | null>(null)
     const [availability, setAvailability] = useState("")
     const router = useRouter()
+
+    const calculateAge = (birthDate: string) => {
+        const today = new Date()
+        const birth = new Date(birthDate)
+
+        let calculatedAge = today.getFullYear() - birth.getFullYear()
+        const monthDiff = today.getMonth() - birth.getMonth()
+
+        if (
+            monthDiff < 0 ||
+            (monthDiff === 0 && today.getDate() < birth.getDate())
+        ) {
+            calculatedAge--
+        }
+
+        return calculatedAge
+    }
+
+    const handleDobChange = (value: string) => {
+        setDob(value)
+
+        if (!value) {
+            setAge(null)
+            return
+        }
+
+        const computedAge = calculateAge(value)
+        setAge(computedAge)
+    }
+
 
     const handleOtpSuccess = () => {
         setOpen(true)
@@ -34,6 +67,10 @@ export default function SignupPage() {
 
     const handleCompleteProfile = () => {
         setOpen(false)
+        if (age !== null && age < 18) {
+            toast.error("You must be at least 18 years old")
+            return
+        }
         router.push("/jobs")
     }
 
@@ -127,18 +164,31 @@ export default function SignupPage() {
 
                         {/* Age */}
                         <div className="space-y-2">
-                            <Label htmlFor="age">Age<sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup> <FieldError>Minimum age must be 18</FieldError></Label>
+                            <Label htmlFor="dob">
+                                Date of Birth
+                                <sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup>
+                            </Label>
+
                             <Input
-                                id="age"
-                                name="age"
-                                type="number"
-                                min={18}
-                                placeholder="Enter your age"
+                                id="dob"
+                                name="dob"
+                                type="date"
+                                value={dob}
+                                onChange={(e) => handleDobChange(e.target.value)}
                                 required
                             />
-                            {/* Conditionally render this */}
-                            {/* {age && age < 18 && <FieldError>Minimum age must be 18</FieldError>} */}
+
+                            {age !== null && (
+                                <p className="text-sm text-muted-foreground">
+                                    Age: {age} years
+                                </p>
+                            )}
+
+                            {age !== null && age < 18 && (
+                                <FieldError>Minimum age must be 18</FieldError>
+                            )}
                         </div>
+
 
                         {/* Gender */}
                         <div className="space-y-2">
