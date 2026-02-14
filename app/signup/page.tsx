@@ -15,13 +15,17 @@ import {
     DialogTitle,
     DialogDescription,
 } from "@/components/ui/dialog"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Label } from "@/components/ui/label"
+import { FieldDescription, FieldError } from "@/components/ui/field"
 
 export default function SignupPage() {
     const [step, setStep] = useState<"details" | "otp">("details")
     const [open, setOpen] = useState(false)
-    const [role, setRole] = useState<"giver" | "receiver">("receiver")
+    const [gender, setGender] = useState("")
+    const [city, setCity] = useState("")
+    const [availability, setAvailability] = useState("")
     const router = useRouter()
 
     const handleOtpSuccess = () => {
@@ -48,30 +52,8 @@ export default function SignupPage() {
 
                         {step === "details" && (
                             <>
-                                <Input placeholder="Full Name" />
-                                <Input placeholder="Mobile Number" type="tel" />
-
-                                <div className="space-y-2">
-                                    <Label>I want to join as</Label>
-                                    <RadioGroup
-                                        defaultValue="receiver"
-                                        onValueChange={(value: "giver" | "receiver") =>
-                                            setRole(value)
-                                        }
-                                        className="flex gap-6"
-                                    >
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="receiver" id="receiver" />
-                                            <Label htmlFor="receiver">Job Receiver</Label>
-                                        </div>
-
-                                        <div className="flex items-center space-x-2">
-                                            <RadioGroupItem value="giver" id="giver" />
-                                            <Label htmlFor="giver">Job Giver</Label>
-                                        </div>
-                                    </RadioGroup>
-                                </div>
-
+                                <Input placeholder="Mobile Number" type="tel" maxLength={10}
+                                    minLength={10} />
                                 <Button
                                     className="w-full"
                                     onClick={() => setStep("otp")}
@@ -114,38 +96,113 @@ export default function SignupPage() {
                         </DialogDescription>
                     </DialogHeader>
 
-                    <div className="space-y-4 pt-4">
+                    <form
+                        className="space-y-6 pt-4"
+                        onSubmit={(e) => {
+                            e.preventDefault();
+                            handleCompleteProfile();
+                        }}
+                    >
+                        {/* Avatar Section */}
+                        <div className="flex items-center gap-4">
+                            <Avatar className="h-16 w-16">
+                                <AvatarImage src="https://github.com/shadcn.png" />
+                                <AvatarFallback>CN</AvatarFallback>
+                            </Avatar>
+                            <Button type="button" className="cursor-pointer">
+                                Upload Photo
+                            </Button>
+                        </div>
 
-                        {role === "receiver" && (
-                            <>
-                                <Input placeholder="Age" type="number" />
-                                <Input placeholder="Gender" />
-                                <Input placeholder="City" />
-                                <Input placeholder="Years of Experience" type="number" />
-                                <Input placeholder="Primary Skill (Hospitality / Tech Ops / Security)" />
-                                <Input placeholder="Availability (Full-time / Part-time / Freelance)" />
-                            </>
-                        )}
+                        {/* Full Name */}
+                        <div className="space-y-2">
+                            <Label htmlFor="fullName">Full Name<sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup></Label>
+                            <Input
+                                id="fullName"
+                                name="fullName"
+                                placeholder="Full Name"
+                                required
+                            />
+                        </div>
 
-                        {role === "giver" && (
-                            <>
-                                <Input placeholder="Company Name" />
-                                <Input placeholder="Industry (Events / Corporate / Tech / Media)" />
-                                <Input placeholder="Company Registration ID" />
-                                <Input placeholder="Official Email Address" type="email" />
-                                <Input placeholder="Head Office City" />
-                                <Input placeholder="Number of Employees" type="number" />
-                            </>
-                        )}
+                        {/* Age */}
+                        <div className="space-y-2">
+                            <Label htmlFor="age">Age<sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup> <FieldError>Minimum age must be 18</FieldError></Label>
+                            <Input
+                                id="age"
+                                name="age"
+                                type="number"
+                                min={18}
+                                placeholder="Enter your age"
+                                required
+                            />
+                            {/* Conditionally render this */}
+                            {/* {age && age < 18 && <FieldError>Minimum age must be 18</FieldError>} */}
+                        </div>
 
-                        <Button
-                            className="w-full"
-                            onClick={handleCompleteProfile}
-                        >
+                        {/* Gender */}
+                        <div className="space-y-2">
+                            <Label>Gender<sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup></Label>
+                            <Select value={gender} onValueChange={setGender}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Gender" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="male">Male</SelectItem>
+                                    <SelectItem value="female">Female</SelectItem>
+                                    <SelectItem value="other">Other</SelectItem>
+                                    <SelectItem value="prefer_not_say">Prefer not to say</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* City */}
+                        <div className="space-y-2">
+                            <Label>Select City<sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup></Label>
+                            <Select value={city} onValueChange={setCity}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select City" />
+                                </SelectTrigger>
+                                <SelectContent className="max-h-72">
+                                    <SelectItem value="mumbai">Mumbai</SelectItem>
+                                    <SelectItem value="delhi">Delhi</SelectItem>
+                                    <SelectItem value="bangalore">Bangalore</SelectItem>
+                                    <SelectItem value="hyderabad">Hyderabad</SelectItem>
+                                    <SelectItem value="chennai">Chennai</SelectItem>
+                                    <SelectItem value="kolkata">Kolkata</SelectItem>
+                                    <SelectItem value="pune">Pune</SelectItem>
+                                    <SelectItem value="ahmedabad">Ahmedabad</SelectItem>
+                                    <SelectItem value="jaipur">Jaipur</SelectItem>
+                                    <SelectItem value="lucknow">Lucknow</SelectItem>
+                                    <SelectItem value="chandigarh">Chandigarh</SelectItem>
+                                    <SelectItem value="bhopal">Bhopal</SelectItem>
+                                    <SelectItem value="kochi">Kochi</SelectItem>
+                                    <SelectItem value="indore">Indore</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Availability */}
+                        <div className="space-y-2">
+                            <Label>Availability<sup className="text-red-500 tracking-tighter -translate-x-1.5">*</sup></Label>
+                            <Select value={availability} onValueChange={setAvailability}>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select Availability" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="full_time">Full-time</SelectItem>
+                                    <SelectItem value="part_time">Part-time</SelectItem>
+                                    <SelectItem value="freelance">Freelance</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Submit */}
+                        <Button type="submit" className="w-full cursor-pointer">
                             Save & Continue
                         </Button>
+                    </form>
 
-                    </div>
                 </DialogContent>
             </Dialog>
 

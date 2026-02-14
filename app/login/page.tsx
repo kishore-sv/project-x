@@ -28,6 +28,8 @@ export default function LoginPage() {
                             <Input
                                 placeholder="Enter 10-digit mobile number"
                                 type="tel"
+                                maxLength={10}
+                                minLength={10}
                             />
                             <Button
                                 className="w-full"

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import PublicNavbar from "@/components/public-navbar";
+import { Toaster } from "sonner"
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -34,6 +35,7 @@ export default function RootLayout({
         {/* <Navbar /> */}
         {/* <PublicNavbar /> */}
         {children}
+        <Toaster richColors position="top-right" />
       </body>
     </html>
   );

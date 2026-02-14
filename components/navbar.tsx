@@ -9,14 +9,21 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { cn } from "@/lib/utils"
-import { IconMenu } from "@tabler/icons-react"
+import { IconBell, IconMenu, IconNotification } from "@tabler/icons-react"
+import { ProfileDropdown } from "./profile-button"
+import {
+    IconHome,
+    IconBriefcase,
+    IconMessage,
+    IconShoppingCart,
+} from "@tabler/icons-react"
 
 const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Jobs", href: "/jobs" },
-    { name: "Ratings", href: "/ratings" },
-    { name: "Orders", href: "/orders" },
-    { name: "Profile", href: "/profile" },
+    { name: "Home", href: "/", icon: IconHome },
+    { name: "Jobs", href: "/jobs", icon: IconBriefcase },
+    { name: "Messages", href: "/messages", icon: IconMessage },
+    { name: "Notifications", href: "/notifications", icon: IconBell },
+    { name: "Orders", href: "/orders", icon: IconShoppingCart },
 ]
 
 export default function Navbar() {
@@ -38,22 +45,25 @@ export default function Navbar() {
                 <nav className="hidden md:flex items-center gap-6">
                     {navLinks.map((link) => {
                         const isActive = pathname === link.href
+                        const Icon = link.icon
 
                         return (
                             <Link
                                 key={link.href}
                                 href={link.href}
                                 className={cn(
-                                    "text-sm font-medium transition-colors",
+                                    "flex items-center gap-2 text-sm font-medium transition-colors",
                                     isActive
                                         ? "text-primary"
                                         : "text-muted-foreground hover:text-foreground"
                                 )}
                             >
+                                <Icon size={18} />
                                 {link.name}
                             </Link>
                         )
                     })}
+                    <ProfileDropdown />
                 </nav>
 
                 {/* Mobile Nav */}
@@ -69,22 +79,25 @@ export default function Navbar() {
                             <div className="mt-8 flex flex-col gap-4">
                                 {navLinks.map((link) => {
                                     const isActive = pathname === link.href
+                                    const Icon = link.icon
 
                                     return (
                                         <Link
                                             key={link.href}
                                             href={link.href}
                                             className={cn(
-                                                "text-sm font-medium",
+                                                "flex items-center gap-2 text-sm font-medium transition-colors",
                                                 isActive
                                                     ? "text-primary"
-                                                    : "text-muted-foreground"
+                                                    : "text-muted-foreground hover:text-foreground"
                                             )}
                                         >
+                                            <Icon size={18} />
                                             {link.name}
                                         </Link>
                                     )
                                 })}
+                                <ProfileDropdown />
                             </div>
                         </SheetContent>
                     </Sheet>
